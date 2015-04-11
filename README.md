@@ -22,7 +22,7 @@ D(i-1,i) is the difference of relative transit times for the two packets. The fo
 
 ````
 
-D(i-1,i) = Ri - ( R(i-1 + (Si - S(i-1)) )
+D(i-1,i) = Ri - ( R(i-1) + (Si - S(i-1)) )
 
 Si is the RTP timestamp from packet i
 Ri is the time of arrival in RTP timestamp units from packet i
