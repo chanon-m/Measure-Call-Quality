@@ -10,7 +10,7 @@ Normally VOIP devices send out one RTP packet per 20ms. In Figure shows the RTP 
 
 
 
-Jitter is measured in timestam units. The formula of jitter can be:
+Jitter is measured in timestamp units. The formula of jitter can be:
 
 ```
 
