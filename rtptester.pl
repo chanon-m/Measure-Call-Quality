@@ -31,15 +31,15 @@ sub server {
         );
         my $pkt_loss = 0;
 
-        #Listen to RTP packets
+        #Listen RTP packets
         while(my $rtp_packet = $rtp->recv()) {
 
-                #the RTP timestamp from packet i
+                #The RTP timestamp from packet i
                 $jitter{S}[0] = $jitter{S}[1];
                 $jitter{S}[1] = $rtp_packet->timestamp();
                 $jitter{S}[0] = $rtp_packet->timestamp() if($jitter{S}[0] == 0);
 
-                #the time of arrival in RTP timestamp units from packet i
+                #The time of arrival in RTP timestamp units from packet i
                 $jitter{R}[0] = $jitter{R}[1];
                 $jitter{R}[1] = time();
                 $jitter{R}[0] = $jitter{R}[1] if($jitter{R}[0] == 0);
