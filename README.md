@@ -28,3 +28,37 @@ Si is the RTP timestamp from packet i
 Ri is the time of arrival in RTP timestamp units from packet i
 
 ````
+
+#How to run file
+
+* Download files on your server
+
+```
+
+# git clone https://github.com/chanon-m/Measure-Call-Quality.git
+
+```
+
+* Make a file executable  
+
+```
+
+# chmod 755 ./Measure-Call-Quality/rtptester.pl
+
+```
+
+* Run rtptester.pl as server
+
+```
+
+# ./Measure-Call-Quality/rtptester.pl -s [your server ip address] [port number]
+
+```
+
+* Run rtptester.pl on remote site
+
+```
+
+# ./Measure-Call-Quality/rtptester.pl -c [your server ip address] [port number] [count]
+
+```
