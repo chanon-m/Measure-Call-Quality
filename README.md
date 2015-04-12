@@ -31,7 +31,7 @@ Ri is the time of arrival in RTP timestamp units from packet i
 
 #How to run file
 
-* Download files on your server
+* Download files on your servers
 
 ```
 
