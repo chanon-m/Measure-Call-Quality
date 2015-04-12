@@ -87,7 +87,7 @@ sub client {
         $packet->payload_type(0); #payload type is u-law
 
         #G711 codec and 20ms sample period
-        my @data = 0 x 160; #G711 payload is 160 byte
+        my @data = 0 x 160; #G711 payload is 160 byte, dummy payload
 
         $packet->payload(@data);
         $packet->seq_num(0); #start seq number
