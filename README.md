@@ -51,7 +51,7 @@ Ri is the time of arrival in RTP timestamp units from packet i
 
 ```
 
-# ./Measure-Call-Quality/rtptester.pl -s [your server ip address] [port number]
+# ./Measure-Call-Quality/rtptester.pl -s [local ip address] [port number]
 
 ```
 
@@ -59,6 +59,6 @@ Ri is the time of arrival in RTP timestamp units from packet i
 
 ```
 
-# ./Measure-Call-Quality/rtptester.pl -c [your server ip address] [port number] [count]
+# ./Measure-Call-Quality/rtptester.pl -c [server ip address] [port number] [count]
 
 ```
