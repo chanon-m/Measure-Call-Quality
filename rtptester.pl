@@ -99,7 +99,7 @@ sub client {
                 my $sent = $rtp->send($packet); #Send RTP packet
 
                 #send RTP packet every 20ms
-                usleep(20);
+                usleep(20000);
                 $count--;
         }
 
