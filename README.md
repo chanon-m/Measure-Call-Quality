@@ -46,7 +46,7 @@ else
 # Deduct 7.5 R-value per Packet Loss. 
 R = R - (7.5 * Packet Loss)
 
-# Deduct Jitter
+# Deduct R-value with Jitter
 R = R - Jitter
 
 ```
