@@ -81,17 +81,22 @@ sub server {
                 $latency = 0 if($latency < 0);
                 $avejitter /= $count;
 
-                my $R = 93;
+                my $R = 93; #R-value of G711
+                
+                # Latency effect. deduct 5 for a delay of 150 ms, 20 for a delay of 240 ms, 30 for a delay of 360 ms.
                 if($latency < 150) {
                     $R = $R - ($latency / 30);
                 } else {
                     $R = $R - ($latency / 12);
                 }
-
+                
+                # Deduct 7.5 R-value per Packet Loss. 
                 $R -= 7.5 * $pkt_loss;
-
+                
+                # Deduct R-value with Jitter
                 $R -= $avejitter;
 
+                #Convert R-value to MOS
                 my ($Rmax,$Rmin,$MOSmax,$MOSmin) = (100,90,5,4.2);
                 ($Rmax,$Rmin,$MOSmax,$MOSmin) = (90,80,4.3,3.9) if($R > 80 && $R <= 90);
                 ($Rmax,$Rmin,$MOSmax,$MOSmin) = (80,70,4.0,3.5) if($R > 70 && $R <= 80);
