@@ -31,11 +31,7 @@ Ri is the time of arrival in RTP timestamp units from packet i
 ````
 
 ####MOS Score
-MOS (Mean Opinion Score) is call quality metric in VOIP industry. It provides a numerical to measure the Quality of Service in Voice Over IP (VOIP). The score range can be from 1 for an unacceptable call to 5 for an excellent call. 
-
-![Alt text](http://www.icalleasy.com/images/mos_and_r_table.png "MOS") 
-
-The key factors that effect the quality of call are latency, packet loss and jitter. So the Pseudocode I use is in below.
+MOS (Mean Opinion Score) is call quality metric in VOIP industry. It provides a numerical to measure the Quality of Service in Voice Over IP (VOIP). The score range can be from 1 for an unacceptable call to 5 for an excellent call. The key factors that effect the quality of call are latency, packet loss and jitter. So the Pseudocode I use is in below.
 
 ```
 # The R-value for G711 codec is 93.
@@ -54,6 +50,10 @@ R = R - (7.5 * Packet Loss)
 R = R - Jitter
 
 ```
+
+The table shows the MOS and R-values that guide for voice quality. Normally, the quality of calls in VOIP are 3.5 - 4.2 MOS range.
+
+![Alt text](http://www.icalleasy.com/images/mos_and_r_table.png "MOS") 
 
 #How to run file
 
