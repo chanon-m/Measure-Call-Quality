@@ -81,39 +81,12 @@ sub server {
                 $latency = 0 if($latency < 0);
                 $avejitter /= $count;
 
-                my $R = 93; #R-value of G711
+                my $R = Rvalue($latency,$pkt_loss,$avejitter,$count);
                 
-                # Latency effect. deduct 5 for a delay of 150 ms, 20 for a delay of 240 ms, 30 for a delay of 360 ms.
-                if($latency < 150) {
-                    $R = $R - ($latency / 30);
-                } else {
-                    $R = $R - ($latency / 12);
-                }
-                
-                # Deduct 7.5 R-value per Packet Loss. 
-                $R -= 7.5 * $pkt_loss;
-                
-                # Deduct R-value with Jitter
-                $R -= $avejitter;
-
                 #Convert R-value to MOS
-                my ($Rmax,$Rmin,$MOSmax,$MOSmin) = (100,90,5,4.2);
-                ($Rmax,$Rmin,$MOSmax,$MOSmin) = (90,80,4.3,3.9) if($R > 80 && $R <= 90);
-                ($Rmax,$Rmin,$MOSmax,$MOSmin) = (80,70,4.0,3.5) if($R > 70 && $R <= 80);
-                ($Rmax,$Rmin,$MOSmax,$MOSmin) = (70,60,3.6,3.0) if($R > 60 && $R <= 70);
-                ($Rmax,$Rmin,$MOSmax,$MOSmin) = (60,50,3.1,2.5) if($R > 50 && $R <= 60);
-                ($Rmax,$Rmin,$MOSmax,$MOSmin) = (50,0,2.6,0.9) if($R <= 50);
-
-                my $MOS = ((($R - $Rmin) * ($MOSmax - $MOSmin)) / ($Rmax - $Rmin)) + $MOSmin;
-
-                printf "-----------------------\n";
-                printf "Call quality: \n";
-                printf "MOS = %.1f \n", $MOS;
-                printf "R-value = %.2f \n", $R;
-                printf "Latency = %.2f ms \n", $latency;
-                printf "Packet Loss = %u \n", $pkt_loss;
-                printf "Jitter = %2.4f \n", $avejitter;
-                printf "-----------------------\n";
+                my $MOS = R2MOS($R);
+                
+                Display_Call_Quality($MOS,$R,$latency,$pkt_loss,$avejitter);
 
                 ($latency,$pkt_loss,$avejitter,$count) = (0,0,0,0);
                 ($jitter{R}[0],$jitter{R}[1]) = (0,0);
@@ -153,6 +126,55 @@ sub client {
         
         $packet->marker(1);
         $rtp->send($packet);
+}
+
+sub Rvalue {
+        my ($latency,$pkt_loss,$avejitter,$count) = ($_[0],$_[1],$_[2],$_[3]);
+
+        my $R = 93; #R-value of G711
+
+        # Latency effect. deduct 5 for a delay of 150 ms, 20 for a delay of 240 ms, 30 for a delay of 360 ms.
+        if($latency < 150) {
+            $R = $R - ($latency / 30);
+        } else {
+            $R = $R - ($latency / 12);
+        }
+
+        # Deduct 7.5 R-value per Packet Loss.
+        $R -= 7.5 * $pkt_loss;
+        # Deduct R-value with Jitter
+        $R -= $avejitter;
+
+        return $R;
+}
+
+sub R2MOS {
+         my $R = $_[0];
+         my ($Rmax,$Rmin,$MOSmax,$MOSmin) = (100,90,5,4.2);
+
+        ($Rmax,$Rmin,$MOSmax,$MOSmin) = (90,80,4.3,3.9) if($R > 80 && $R <= 90);
+        ($Rmax,$Rmin,$MOSmax,$MOSmin) = (80,70,4.0,3.5) if($R > 70 && $R <= 80);
+        ($Rmax,$Rmin,$MOSmax,$MOSmin) = (70,60,3.6,3.0) if($R > 60 && $R <= 70);
+        ($Rmax,$Rmin,$MOSmax,$MOSmin) = (60,50,3.1,2.5) if($R > 50 && $R <= 60);
+        ($Rmax,$Rmin,$MOSmax,$MOSmin) = (50,0,2.6,0.9) if($R <= 50);
+
+        my $MOS = ((($R - $Rmin) * ($MOSmax - $MOSmin)) / ($Rmax - $Rmin)) + $MOSmin;
+
+        return $MOS;
+}
+
+sub Display_Call_Quality {
+        my @report = @_;
+
+        printf "-----------------------\n";
+        printf "Call quality: \n";
+        printf "MOS = %.1f \n", $report[0];
+        printf "R-value = %.2f \n", $report[1];
+        printf "Latency = %.2f ms \n", $report[2];
+        printf "Packet Loss = %u \n", $report[3];
+        printf "Jitter = %2.4f \n", $report[4];
+        printf "-----------------------\n";
+
 }
 
 sub usage {
