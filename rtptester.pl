@@ -29,11 +29,12 @@ sub server {
             SEQ  => [ 0, 0 ],
             D    =>   0,
         );
-        my $pkt_loss = 0;
+        my ($latency,$pkt_loss,$avejitter,$count) = (0,0,0,0);
 
         #Listen RTP packets
         while(my $rtp_packet = $rtp->recv()) {
 
+            if(!$rtp_packet->marker()) {
                 #The RTP timestamp from packet i
                 $jitter{S}[0] = $jitter{S}[1];
                 $jitter{S}[1] = $rtp_packet->timestamp();
@@ -71,6 +72,48 @@ sub server {
                 printf "Jitter = %2.4f, Packet Loss = %u \n",  $jitter{J}[1], $pkt_loss;
 
                 $jitter{J}[0] =  $jitter{J}[1];
+                
+                $avejitter += $jitter{J}[1];
+                $latency += ($jitter{R}[1] - $jitter{R}[0]);
+                $count++;
+            } else {   
+                $latency = ($latency/$count) - 0.02;
+                $latency = 0 if($latency < 0);
+                $avejitter /= $count;
+
+                my $R = 93;
+                if($latency < 150) {
+                    $R = $R - ($latency / 30);
+                } else {
+                    $R = $R - ($latency / 12);
+                }
+
+                $R -= 7.5 * $pkt_loss;
+
+                $R -= $avejitter;
+
+                my ($Rmax,$Rmin,$MOSmax,$MOSmin) = (100,90,5,4.2);
+                ($Rmax,$Rmin,$MOSmax,$MOSmin) = (90,80,0,4.3,3.9) if($R > 80 && $R <= 90);
+                ($Rmax,$Rmin,$MOSmax,$MOSmin) = (80,70,0,4.0,3.5) if($R > 70 && $R <= 80);
+                ($Rmax,$Rmin,$MOSmax,$MOSmin) = (70,60,0,3.6,3.0) if($R > 60 && $R <= 70);
+                ($Rmax,$Rmin,$MOSmax,$MOSmin) = (60,50,0,3.1,2.5) if($R > 50 && $R <= 60);
+                ($Rmax,$Rmin,$MOSmax,$MOSmin) = (50,0,0,2.6,0.9) if($R <= 50);
+
+                my $MOS = ((($R - $Rmin) * ($MOSmax - $MOSmin)) / ($Rmax - $Rmin)) + $MOSmin;
+
+                printf "-----------------------\n";
+                printf "Call quality: \n";
+                printf "MOS = %.1f \n", $MOS;
+                printf "R-value = %.2f \n", $R;
+                printf "Latency = %.2f ms \n", $latency;
+                printf "Packet Loss = %u \n", $pkt_loss;
+                printf "Jitter = %2.4f \n", $avejitter;
+                printf "-----------------------\n";
+
+                ($latency,$pkt_loss,$avejitter,$count) = (0,0,0,0);
+                ($jitter{R}[0],$jitter{R}[1]) = (0,0);
+
+            }      
       }
       
 }
@@ -102,7 +145,9 @@ sub client {
                 usleep(20000);
                 $count--;
         }
-
+        
+        $packet->marker(1);
+        $rtp->send($packet);
 }
 
 sub usage {
