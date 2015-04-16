@@ -39,9 +39,9 @@ R = 93
 
 # Latency effect. deduct 5 for a delay of 150 ms, 20 for a delay of 240 ms, 30 for a delay of 360 ms.
 If Latency < 150 
-     R = 93 - (Latency / 30)
+     R = R - (Latency / 30)
 else
-     R = 93 - (Latency / 12)   
+     R = R - (Latency / 12)   
      
 # Deduct 7.5 R-value per Packet Loss. 
 R = R - (7.5 * Packet Loss)
