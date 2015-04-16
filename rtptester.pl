@@ -36,21 +36,16 @@ sub server {
 
             if(!$rtp_packet->marker()) {
                 #The RTP timestamp from packet i
-                $jitter{S}[0] = $jitter{S}[1];
-                $jitter{S}[1] = $rtp_packet->timestamp();
+                ($jitter{S}[0],$jitter{S}[1]) = ($jitter{S}[1],$rtp_packet->timestamp());
                 $jitter{S}[0] = $rtp_packet->timestamp() if($jitter{S}[0] == 0);
 
                 #The time of arrival in RTP timestamp units from packet i
-                $jitter{R}[0] = $jitter{R}[1];
-                $jitter{R}[1] = time();
+                ($jitter{R}[0],$jitter{R}[1]) = ($jitter{R}[1],time());
                 $jitter{R}[0] = $jitter{R}[1] if($jitter{R}[0] == 0);
 
-                $jitter{SEQ}[0] = $jitter{SEQ}[1];
-                $jitter{SEQ}[1] = $rtp_packet->seq_num();
+                ($jitter{SEQ}[0],$jitter{SEQ}[1]) = ($jitter{SEQ}[1],$rtp_packet->seq_num());
                 if($jitter{SEQ}[1] == 1) { #initial variable at first rtp packet
-                    $jitter{SEQ}[0] = 0;
-                    $jitter{J}[0] = 0;
-                    $jitter{D} = 0;
+                    ($jitter{SEQ}[0],$jitter{J}[0],$jitter{D}) = (0,0,0);
                 } else {
                     #Calculate the difference of relative transit times for the two packets
                     $jitter{D} = abs($jitter{R}[1] - ($jitter{R}[0] + ($jitter{S}[1] - $jitter{S}[0])))/1000;
