@@ -61,10 +61,8 @@ sub server {
                     $pkt_loss += $diff_SEQ if($jitter{SEQ}[0] != 0);
                 }
 
-                #Display results
-                printf "%u RTP Payload = %u bytes, ", $jitter{SEQ}[1], $rtp_packet->payload_size();
-                printf "from %s:%s ", $rtp_packet->source_ip(), $rtp_packet->source_port();
-                printf "Jitter = %2.4f, Packet Loss = %u \n",  $jitter{J}[1], $pkt_loss;
+                Display_result($jitter{SEQ}[1], $rtp_packet->payload_size(),$rtp_packet->source_ip(),
+                                $rtp_packet->source_port(),$jitter{J}[1], $pkt_loss);
 
                 $jitter{J}[0] =  $jitter{J}[1];
                 
@@ -122,6 +120,14 @@ sub client {
         
         $packet->marker(1);
         $rtp->send($packet);
+}
+
+sub Display_result {
+        my @report = @_;
+
+        printf "%u RTP Payload = %u bytes, ", $report[0], $report[1];
+        printf "from %s:%s ", $report[2], $report[3];
+        printf "Jitter = %2.4f, Packet Loss = %u \n",  $report[4], $report[5];
 }
 
 sub Rvalue {
