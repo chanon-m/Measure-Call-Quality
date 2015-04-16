@@ -93,11 +93,11 @@ sub server {
                 $R -= $avejitter;
 
                 my ($Rmax,$Rmin,$MOSmax,$MOSmin) = (100,90,5,4.2);
-                ($Rmax,$Rmin,$MOSmax,$MOSmin) = (90,80,0,4.3,3.9) if($R > 80 && $R <= 90);
-                ($Rmax,$Rmin,$MOSmax,$MOSmin) = (80,70,0,4.0,3.5) if($R > 70 && $R <= 80);
-                ($Rmax,$Rmin,$MOSmax,$MOSmin) = (70,60,0,3.6,3.0) if($R > 60 && $R <= 70);
-                ($Rmax,$Rmin,$MOSmax,$MOSmin) = (60,50,0,3.1,2.5) if($R > 50 && $R <= 60);
-                ($Rmax,$Rmin,$MOSmax,$MOSmin) = (50,0,0,2.6,0.9) if($R <= 50);
+                ($Rmax,$Rmin,$MOSmax,$MOSmin) = (90,80,4.3,3.9) if($R > 80 && $R <= 90);
+                ($Rmax,$Rmin,$MOSmax,$MOSmin) = (80,70,4.0,3.5) if($R > 70 && $R <= 80);
+                ($Rmax,$Rmin,$MOSmax,$MOSmin) = (70,60,3.6,3.0) if($R > 60 && $R <= 70);
+                ($Rmax,$Rmin,$MOSmax,$MOSmin) = (60,50,3.1,2.5) if($R > 50 && $R <= 60);
+                ($Rmax,$Rmin,$MOSmax,$MOSmin) = (50,0,2.6,0.9) if($R <= 50);
 
                 my $MOS = ((($R - $Rmin) * ($MOSmax - $MOSmin)) / ($Rmax - $Rmin)) + $MOSmin;
 
