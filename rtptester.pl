@@ -61,7 +61,7 @@ sub server {
                     $pkt_loss += $diff_SEQ if($jitter{SEQ}[0] != 0);
                 }
 
-                Display_result($jitter{SEQ}[1], $rtp_packet->payload_size(),$rtp_packet->source_ip(),
+                Display_result($jitter{SEQ}[1], $rtp_packet->payload_size(), $rtp_packet->source_ip(),
                                 $rtp_packet->source_port(),$jitter{J}[1], $pkt_loss);
 
                 $jitter{J}[0] =  $jitter{J}[1];
