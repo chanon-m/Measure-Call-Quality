@@ -62,7 +62,7 @@ sub server {
                     $jitter{J}[1] = $jitter{J}[0] + (($jitter{D} - $jitter{J}[0])/16);
                 } else {
                     $jitter{J}[1] = 0;
-                    $diff_SEQ = abs($diff_SEQ);
+                    $diff_SEQ = abs($diff_SEQ) - 1 if(abs($diff_SEQ) > 0);
                     $pkt_loss += $diff_SEQ if($jitter{SEQ}[0] != 0);
                 }
 
