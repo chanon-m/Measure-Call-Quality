@@ -81,6 +81,7 @@ sub server {
                 $latency = 0 if($latency < 0);
                 $avejitter /= $count;
 
+                #Calculate R-value
                 my $R = Rvalue($latency,$pkt_loss,$avejitter,$count);
                 
                 #Convert R-value to MOS
