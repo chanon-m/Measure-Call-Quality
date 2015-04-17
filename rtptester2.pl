@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 #rtptest2.pl
-#New feature: report in both sites
+#A new feature: report in both sites
 #Chanon M
 
 use strict;
