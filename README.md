@@ -57,7 +57,7 @@ The table shows the MOS and R-values that guide for voice quality. Normally, the
 
 #How to run file
 
-* Download files on your servers
+* Download files to your servers
 
 ```
 
