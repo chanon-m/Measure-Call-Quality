@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-#rtptest.pl 
+#rtptester.pl 
 #Chanon M
 
 use strict;
