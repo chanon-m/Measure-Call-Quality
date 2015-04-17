@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-#rtptest2.pl
+#rtptester2.pl
 #A new feature: report in both sites
 #Chanon M
 
